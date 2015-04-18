@@ -20,8 +20,6 @@ package multibindings;
  */
 public interface Plugin {
 
-	String name();
-
 	void initialize();
 
 }

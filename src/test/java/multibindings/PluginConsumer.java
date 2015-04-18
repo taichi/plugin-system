@@ -16,7 +16,8 @@
 package multibindings;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
@@ -26,15 +27,21 @@ import javax.inject.Inject;
  */
 public class PluginConsumer {
 
-	Set<Plugin> plugins;
+	Map<String, Plugin> plugins;
 
 	@Inject
-	public PluginConsumer(Set<Plugin> plugins) {
+	public PluginConsumer(Map<String, Plugin> plugins) {
+		plugins.entrySet().stream().map(Map.Entry::getValue)
+				.forEach(Plugin::initialize);
 		this.plugins = plugins;
 	}
 
+	public Optional<Plugin> find(String name) {
+		return Optional.ofNullable(this.plugins.get(name));
+	}
+
 	public List<String> execute() {
-		return this.plugins.stream().map(p -> ">> " + p.name())
+		return this.plugins.entrySet().stream().map(e -> ">> " + e.getKey())
 				.collect(Collectors.toList());
 	}
 }

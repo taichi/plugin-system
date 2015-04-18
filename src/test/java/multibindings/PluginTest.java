@@ -16,8 +16,10 @@
 package multibindings;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 import org.junit.Test;
@@ -36,19 +38,24 @@ public class PluginTest {
 	@Test
 	public void staticLoading() {
 		Injector injector = Guice.createInjector(new FirstModule());
-		PluginConsumer instance = injector.getInstance(PluginConsumer.class);
-		String string = instance.execute().get(0);
-		assertEquals(">> first-plugin", string);
+		PluginConsumer consumer = injector.getInstance(PluginConsumer.class);
+
+		Optional<Plugin> opt = consumer.find("first");
+		assertTrue(opt.isPresent());
+
+		String string = consumer.execute().get(0);
+		assertEquals(">> first", string);
 	}
 
 	@Test
 	public void dynamicLoading() throws Exception {
 		ServiceLoader<Module> loader = ServiceLoader.load(Module.class);
 		Injector injector = Guice.createInjector(loader);
-		PluginConsumer instance = injector.getInstance(PluginConsumer.class);
-		List<String> names = instance.execute();
+		PluginConsumer consumer = injector.getInstance(PluginConsumer.class);
+		List<String> names = consumer.execute();
 		assertEquals(2, names.size());
-		assertEquals(">> first-plugin", names.get(0));
-		assertEquals(">> second-plugin", names.get(1));
+		assertEquals(">> first", names.get(0));
+		assertEquals(">> second", names.get(1));
 	}
+
 }

@@ -19,7 +19,7 @@ import multibindings.Plugin;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
-import com.google.inject.multibindings.Multibinder;
+import com.google.inject.multibindings.MapBinder;
 
 /**
  * @author taichi
@@ -28,8 +28,10 @@ public class SecondModule implements Module {
 
 	@Override
 	public void configure(Binder binder) {
-		Multibinder<Plugin> mb = Multibinder.newSetBinder(binder, Plugin.class);
-		mb.addBinding().to(SecondPlugin.class);
+		MapBinder<String, Plugin> mb = MapBinder.newMapBinder(binder,
+				String.class, Plugin.class);
+		mb.addBinding("second").to(SecondPlugin.class);
+
 	}
 
 }
