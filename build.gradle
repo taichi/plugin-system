@@ -14,6 +14,7 @@ test {
 }
 
 dependencies {
+	compile 'com.google.inject.extensions:guice-multibindings:4.0+'
 	testCompile 'org.jmockit:jmockit:1.+'
 	testCompile 'junit:junit:4.+'
 }
