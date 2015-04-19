@@ -15,7 +15,9 @@
  */
 package first;
 
-import multibindings.Plugin;
+import multibindings.InputPlugin;
+import multibindings.OutputPlugin;
+import multibindings.PluginRegistry;
 
 import com.google.inject.Binder;
 import com.google.inject.Module;
@@ -28,9 +30,12 @@ public class FirstModule implements Module {
 
 	@Override
 	public void configure(Binder binder) {
-		MapBinder<String, Plugin> mb = MapBinder.newMapBinder(binder,
-				String.class, Plugin.class);
-		mb.addBinding("first").to(FirstPlugin.class);
-	}
+		MapBinder<String, InputPlugin> inputs = PluginRegistry.newBinder(
+				binder, InputPlugin.class);
+		inputs.addBinding("file").to(FileInputPlugin.class);
 
+		MapBinder<String, OutputPlugin> outputs = PluginRegistry.newBinder(
+				binder, OutputPlugin.class);
+		outputs.addBinding("file").to(FileOutputPlugin.class);
+	}
 }

@@ -15,22 +15,30 @@
  */
 package second;
 
-import multibindings.InputPlugin;
-import multibindings.PluginRegistry;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UncheckedIOException;
+import java.net.URL;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.multibindings.MapBinder;
+import multibindings.InputPlugin;
 
 /**
  * @author taichi
  */
-public class SecondModule implements Module {
+public class URLInputPlugin implements InputPlugin {
 
 	@Override
-	public void configure(Binder binder) {
-		MapBinder<String, InputPlugin> inputs = PluginRegistry.newBinder(
-				binder, InputPlugin.class);
-		inputs.addBinding("url").to(URLInputPlugin.class);
+	public void initialize() {
+	}
+
+	@Override
+	public InputStream open(String path) {
+		URL url;
+		try {
+			url = new URL(path);
+			return url.openStream();
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
 	}
 }

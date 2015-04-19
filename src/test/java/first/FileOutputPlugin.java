@@ -13,24 +13,31 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package second;
+package first;
 
-import multibindings.InputPlugin;
-import multibindings.PluginRegistry;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
+import java.io.UncheckedIOException;
 
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.multibindings.MapBinder;
+import multibindings.OutputPlugin;
 
 /**
  * @author taichi
  */
-public class SecondModule implements Module {
+public class FileOutputPlugin implements OutputPlugin {
 
 	@Override
-	public void configure(Binder binder) {
-		MapBinder<String, InputPlugin> inputs = PluginRegistry.newBinder(
-				binder, InputPlugin.class);
-		inputs.addBinding("url").to(URLInputPlugin.class);
+	public void initialize() {
 	}
+
+	@Override
+	public OutputStream open(String path) {
+		try {
+			return new FileOutputStream(path);
+		} catch (FileNotFoundException e) {
+			throw new UncheckedIOException(e);
+		}
+	}
+
 }

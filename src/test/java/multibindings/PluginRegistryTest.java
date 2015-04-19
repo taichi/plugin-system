@@ -13,24 +13,32 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  */
-package second;
+package multibindings;
 
-import multibindings.InputPlugin;
-import multibindings.PluginRegistry;
+import static org.junit.Assert.assertNotNull;
 
-import com.google.inject.Binder;
+import java.util.ServiceLoader;
+
+import org.junit.Test;
+
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.google.inject.Module;
-import com.google.inject.multibindings.MapBinder;
 
 /**
  * @author taichi
  */
-public class SecondModule implements Module {
+public class PluginRegistryTest {
 
-	@Override
-	public void configure(Binder binder) {
-		MapBinder<String, InputPlugin> inputs = PluginRegistry.newBinder(
-				binder, InputPlugin.class);
-		inputs.addBinding("url").to(URLInputPlugin.class);
+	@Test
+	public void test() {
+		ServiceLoader<Module> loader = ServiceLoader.load(Module.class);
+		Injector injector = Guice.createInjector(loader);
+
+		PluginRegistry registry = injector.getInstance(PluginRegistry.class);
+		assertNotNull(registry.newPlugin(InputPlugin.class, "file"));
+		assertNotNull(registry.newPlugin(InputPlugin.class, "url"));
+		assertNotNull(registry.newPlugin(OutputPlugin.class, "file"));
 	}
+
 }
