@@ -30,6 +30,7 @@ public class FirstModule implements Module {
 	public void configure(Binder binder) {
 		Multibinder<Plugin> mb = Multibinder.newSetBinder(binder, Plugin.class);
 		mb.addBinding().to(FirstPlugin.class);
+		mb.addBinding().to(MoreFirstPlugin.class);
 	}
 
 }

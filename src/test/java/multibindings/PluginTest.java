@@ -47,8 +47,8 @@ public class PluginTest {
 		Injector injector = Guice.createInjector(loader);
 		PluginConsumer instance = injector.getInstance(PluginConsumer.class);
 		List<String> names = instance.execute();
-		assertEquals(2, names.size());
+		assertEquals(3, names.size());
 		assertEquals(">> first-plugin", names.get(0));
-		assertEquals(">> second-plugin", names.get(1));
+		assertEquals(">> second-plugin", names.get(2));
 	}
 }
