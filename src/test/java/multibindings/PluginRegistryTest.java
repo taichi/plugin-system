@@ -31,7 +31,19 @@ import com.google.inject.Module;
 public class PluginRegistryTest {
 
 	@Test
-	public void test() {
+	public void eagerLoading() {
+		ServiceLoader<Module> loader = ServiceLoader.load(Module.class);
+		Injector injector = Guice.createInjector(loader);
+
+		EagerLoadingPluginRegistry registry = injector
+				.getInstance(EagerLoadingPluginRegistry.class);
+		assertNotNull(registry.newPlugin(InputPlugin.class, "file"));
+		assertNotNull(registry.newPlugin(InputPlugin.class, "url"));
+		assertNotNull(registry.newPlugin(OutputPlugin.class, "file"));
+	}
+
+	@Test
+	public void lazyLoading() {
 		ServiceLoader<Module> loader = ServiceLoader.load(Module.class);
 		Injector injector = Guice.createInjector(loader);
 
